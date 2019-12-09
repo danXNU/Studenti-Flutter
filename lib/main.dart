@@ -3,7 +3,55 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import './views/video_cell.dart';
 
-void main() => runApp(new RealWorldApp());
+void main() => runApp(new MainApp());
+
+class MainApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return new MainAppState();
+  }
+}
+
+class MainAppState extends State<MainApp> {
+  int _currentIndex = 0;
+
+  final List<Widget> _children = [
+    RealWorldApp(),
+    new Text("Asd"),
+    new Text("Bsd"),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            
+            title: Text("Studenti"),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentIndex,
+              items: [
+                BottomNavigationBarItem(icon: Icon(Icons.assessment), title: new Text("Verifiche")),
+                BottomNavigationBarItem(icon: Icon(Icons.book), title: new Text("Compiti")),
+                BottomNavigationBarItem(icon: Icon(Icons.access_time), title: new Text("Orario")),
+              ],
+              onTap: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+            ),
+          
+          body: _children[_currentIndex]
+          ),
+        ),
+      );
+    
+  }
+}
 
 class RealWorldApp extends StatefulWidget {
   @override
@@ -35,8 +83,37 @@ class RealWorldState extends State<RealWorldApp> {
     }
   }
 
+@override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
+    return new Center(
+          child: _isLoading
+              ? new CircularProgressIndicator()
+              : new ListView.builder(
+                  itemCount: this.tasks != null ? this.tasks.length : 0,
+                  itemBuilder: (context, i) {
+                    final task = this.tasks[i];
+                    return new FlatButton(
+                      padding: new EdgeInsets.all(0.0),
+                      child: new TaskCell(task),
+                      onPressed: () {
+                        print("Task cell tapped: $i");
+                        Navigator.push(context, 
+                          new MaterialPageRoute(
+                            builder: (context) => new DetailPage()
+                          )
+                        );
+                      },
+                    );
+                  },
+                  ),
+        );
+
 
     return new MaterialApp(
       home: new Scaffold(
