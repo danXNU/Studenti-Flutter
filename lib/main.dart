@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:pinch_zoom_image/pinch_zoom_image.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import './views/video_cell.dart';
+import 'package:photo_view/photo_view.dart';
 
 
 void main() => runApp(new MainApp());
@@ -238,8 +237,8 @@ class OrarioPage extends StatelessWidget {
       appBar: new AppBar(
         title: new Text("Orario"),
       ),
-      body: new PinchZoomImage(
-        image: new Image.network("http://64.52.84.80/Studenti-Server/orario/orario.jpg"),
+      body: new PhotoView(
+        imageProvider: NetworkImage("http://64.52.84.80/Studenti-Server/orario/orario.jpg"),
       )
       
     );
