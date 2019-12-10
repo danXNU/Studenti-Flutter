@@ -165,14 +165,14 @@ class CompitiState extends State<CompitiPage> {
   _fetchData() async {
     print("Attempting to fetch data from network");
 
-    final url = "http://64.52.84.80/Studenti-Server/get_tasks.php?task_type=0";
+    final url = "http://64.52.84.80/Studenti-Server/get_tasks.php?task_type=2";
     final response = await http.get(url);
 
     print(url);
 
     if (response.statusCode == 200) {
       // print(response.body);
-
+      print(json.decode(response.body));
       final tasksJson = json.decode(response.body);
 
       setState(() {
