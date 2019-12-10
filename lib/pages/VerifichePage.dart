@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../objects.dart';
-import '../views/video_cell.dart';
+import '../views/task_cell.dart';
 import '../pages/DetailPage.dart';
 
 class VerifichePage extends StatefulWidget {

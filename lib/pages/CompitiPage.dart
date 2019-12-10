@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../views/video_cell.dart';
+import '../views/task_cell.dart';
 import '../pages/DetailPage.dart';
 
 class CompitiPage extends StatefulWidget {
