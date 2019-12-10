@@ -16,8 +16,8 @@ class MainAppState extends State<MainApp> {
   int _currentIndex = 0;
 
   final List<Widget> _children = [
-    RealWorldApp(),
-    new Text("Asd"),
+    new VerifichePage(1),
+    new CompitiPage(),
     new Text("Bsd"),
   ];
 
@@ -27,10 +27,7 @@ class MainAppState extends State<MainApp> {
       home: DefaultTabController(
         length: 3,
         child: Scaffold(
-          appBar: AppBar(
-            
-            title: Text("Studenti"),
-          ),
+          
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
               items: [
@@ -53,16 +50,19 @@ class MainAppState extends State<MainApp> {
   }
 }
 
-class RealWorldApp extends StatefulWidget {
+class VerifichePage extends StatefulWidget {
+  final int taskType;
+
+  VerifichePage(this.taskType);
+
   @override
   State<StatefulWidget> createState() {
-    return new RealWorldState();
+    return new VerificheState();
   }
 }
 
-class RealWorldState extends State<RealWorldApp> {
+class VerificheState extends State<VerifichePage> {
   var _isLoading = true;
-
   var tasks;
 
   _fetchData() async {
@@ -70,6 +70,8 @@ class RealWorldState extends State<RealWorldApp> {
 
     final url = "http://64.52.84.80/Studenti-Server/get_tasks.php?task_type=1";
     final response = await http.get(url);
+
+    print(url);
 
     if (response.statusCode == 200) {
       // print(response.body);
@@ -91,7 +93,19 @@ class RealWorldState extends State<RealWorldApp> {
 
   @override
   Widget build(BuildContext context) {
-    return new Center(
+    return new Scaffold(
+      appBar: AppBar(
+            title: Text("Verifiche"),
+            actions: [
+              new IconButton(
+                icon: new Icon(Icons.refresh),
+                onPressed: () {
+                  _fetchData();
+                },
+              )
+            ],
+          ),
+      body: new Center(
           child: _isLoading
               ? new CircularProgressIndicator()
               : new ListView.builder(
@@ -112,27 +126,81 @@ class RealWorldState extends State<RealWorldApp> {
                     );
                   },
                   ),
-        );
+        ),
+    );
+    
+  
+  }
+}
 
-
-    return new MaterialApp(
-      home: new Scaffold(
+class DetailPage extends StatelessWidget {
+  @override
+    Widget build(BuildContext context) {
+      return new Scaffold(
         appBar: new AppBar(
-          title: new Text("Studenti"),
-          actions: <Widget>[
-            new IconButton(
-              icon: new Icon(Icons.refresh),
-              onPressed: () {
-                print("Reloading...");
-                setState(() {
-                  _isLoading = true;
-                });
-                _fetchData();
-              },
-            )
-          ],
+          title: new Text("Detail page"),
         ),
         body: new Center(
+          child: new Text("Detail detail detail"),
+        ),
+      );
+    }
+}
+
+
+class CompitiPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return new CompitiState();
+  }
+}
+
+class CompitiState extends State<CompitiPage> {
+  var _isLoading = true;
+
+  var tasks;
+
+  _fetchData() async {
+    print("Attempting to fetch data from network");
+
+    final url = "http://64.52.84.80/Studenti-Server/get_tasks.php?task_type=0";
+    final response = await http.get(url);
+
+    print(url);
+
+    if (response.statusCode == 200) {
+      // print(response.body);
+
+      final tasksJson = json.decode(response.body);
+
+      setState(() {
+        _isLoading = false;
+        this.tasks = tasksJson;
+      });
+    }
+  }
+
+@override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: AppBar(
+            title: Text("Compiti"),
+            actions: [
+              new IconButton(
+                icon: new Icon(Icons.refresh),
+                onPressed: () {
+                  _fetchData();
+                },
+              )
+            ],
+          ),
+      body: new Center(
           child: _isLoading
               ? new CircularProgressIndicator()
               : new ListView.builder(
@@ -152,23 +220,10 @@ class RealWorldState extends State<RealWorldApp> {
                       },
                     );
                   },
-                ),
+                  ),
         ),
-      ),
     );
+    
+  
   }
-}
-
-class DetailPage extends StatelessWidget {
-  @override
-    Widget build(BuildContext context) {
-      return new Scaffold(
-        appBar: new AppBar(
-          title: new Text("Detail page"),
-        ),
-        body: new Center(
-          child: new Text("Detail detail detail"),
-        ),
-      );
-    }
 }
