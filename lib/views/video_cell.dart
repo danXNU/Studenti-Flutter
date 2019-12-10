@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../objects.dart';
 
 class TaskCell extends StatelessWidget {
-  final task;
+  final TaskObject task;
 
   TaskCell(this.task);
 
@@ -18,7 +19,7 @@ class TaskCell extends StatelessWidget {
                 height: 8.0,
               ),
               new Text(
-                task["titolo"],
+                task.titolo,
                 style:
                     new TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
               ),
