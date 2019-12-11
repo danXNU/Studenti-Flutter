@@ -18,7 +18,7 @@ class VerifichePage extends StatefulWidget {
 
 class VerificheState extends State<VerifichePage> with AutomaticKeepAliveClientMixin<VerifichePage> {
   var _isLoading = true;
-  var tasks;
+  List<TaskObject> tasks;
 
   @override 
   bool get wantKeepAlive => true;
@@ -58,9 +58,37 @@ class VerificheState extends State<VerifichePage> with AutomaticKeepAliveClientM
     _fetchData();
   }
 
+bool showAllVerifiche = false;
+
+List<TaskObject> newTasks(bool showAll) {
+  final DateTime now = DateTime.now();
+  final DateTime lastMidnight = DateTime(now.year, now.month, now.day);
+
+  if (showAll) {
+    return tasks;
+  } else {
+    final asd = tasks.where((task) => 
+      task.date.isAfter(lastMidnight)
+    ).toList();
+    return asd;
+  }
+}
+
   @override
   Widget build(BuildContext context) {
+    final  timedTasks = newTasks(showAllVerifiche);
+
     return new Scaffold(
+      persistentFooterButtons: <Widget>[
+        new Switch(
+          value: showAllVerifiche,
+          onChanged: (newValue) {
+            setState(() {
+              showAllVerifiche = newValue;
+            });
+          },
+        )
+      ],
       appBar: AppBar(
             title: Text("Verifiche"),
             actions: [
@@ -76,9 +104,9 @@ class VerificheState extends State<VerifichePage> with AutomaticKeepAliveClientM
           child: _isLoading
               ? new CircularProgressIndicator()
               : new ListView.builder(
-                  itemCount: this.tasks != null ? this.tasks.length : 0,
+                  itemCount: timedTasks != null ? timedTasks.length : 0,
                   itemBuilder: (context, i) {
-                    final task = this.tasks[i];
+                    final task = timedTasks[i];
                     return new FlatButton(
                       padding: new EdgeInsets.all(0.0),
                       child: new TaskCell(task),

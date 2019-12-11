@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../views/task_cell.dart';
 import '../pages/DetailPage.dart';
+import '../objects.dart';
 
 class CompitiPage extends StatefulWidget {
   @override
@@ -28,13 +29,19 @@ class CompitiState extends State<CompitiPage> with AutomaticKeepAliveClientMixin
 
     if (response.statusCode == 200) {
       // print(response.body);
-      print(json.decode(response.body));
+
       final tasksJson = json.decode(response.body);
+
+      var convertedTasks = new List<TaskObject>();
+      tasksJson.forEach((taskDict) {
+        final task = new TaskObject(taskDict["id"], taskDict["titolo"], taskDict["materia"], taskDict["argomento"], taskDict["date"]);
+        convertedTasks.add(task);
+      });
 
       if (mounted) {
         setState(() {
           _isLoading = false;
-          this.tasks = tasksJson;
+          this.tasks = convertedTasks;
         });
       }
       
