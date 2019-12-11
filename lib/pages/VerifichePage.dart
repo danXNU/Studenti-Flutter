@@ -64,14 +64,7 @@ List<TaskObject> newTasks(bool showAll) {
   final DateTime now = DateTime.now();
   final DateTime lastMidnight = DateTime(now.year, now.month, now.day);
 
-  if (showAll) {
-    return tasks;
-  } else {
-    final asd = tasks.where((task) => 
-      task.date.isAfter(lastMidnight)
-    ).toList();
-    return asd;
-  }
+  return showAll ? tasks : tasks.where((task) => task.date.isAfter(lastMidnight)).toList();
 }
 
   @override
@@ -88,6 +81,11 @@ List<TaskObject> newTasks(bool showAll) {
             });
           },
         )
+          ],
+        )
+        
+      
+        
       ],
       appBar: AppBar(
             title: Text("Verifiche"),
