@@ -18,7 +18,7 @@ class VerifichePage extends StatefulWidget {
 
 class VerificheState extends State<VerifichePage> with AutomaticKeepAliveClientMixin<VerifichePage> {
   var _isLoading = true;
-  List<TaskObject> tasks;
+  List<TaskObject> tasks = List<TaskObject>();
 
   @override 
   bool get wantKeepAlive => true;
@@ -82,11 +82,6 @@ List<TaskObject> newTasks(bool showAll) {
           },
         )
           ],
-        )
-        
-      
-        
-      ],
       appBar: AppBar(
             title: Text("Verifiche"),
             actions: [
