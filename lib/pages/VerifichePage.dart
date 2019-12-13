@@ -18,7 +18,7 @@ class VerifichePage extends StatefulWidget {
 
 class VerificheState extends State<VerifichePage> with AutomaticKeepAliveClientMixin<VerifichePage> {
   var _isLoading = true;
-  var _isError = false;
+  var errorReported = false;
   List<TaskObject> tasks = List<TaskObject>();
 
   @override 
@@ -48,14 +48,17 @@ class VerificheState extends State<VerifichePage> with AutomaticKeepAliveClientM
         setState(() {
           _isLoading = false;
           this.tasks = convertedTasks;
-          this._isError = false;
+          this.errorReported = false;
         });
       }
       
     }
     } catch (e) {
       print(e);
-      this._isError = true;
+      setState(() {
+        this.errorReported = true;  
+      });
+      
     }
     
   }
@@ -73,6 +76,36 @@ List<TaskObject> newTasks(bool showAll) {
   final DateTime lastMidnight = DateTime(now.year, now.month, now.day);
 
   return showAll ? tasks : tasks.where((task) => task.date.isAfter(lastMidnight)).toList();
+}
+
+Widget getSituationalView(List<TaskObject> tasks) {
+  if (errorReported) {
+    return new Center(
+      child: new Text("Error"),
+    );
+  } else {
+    return _isLoading
+              ? new CircularProgressIndicator()
+              : new ListView.builder(
+                  itemCount: tasks != null ? tasks.length : 0,
+                  itemBuilder: (context, i) {
+                    final task = tasks[i];
+                    return new FlatButton(
+                      padding: new EdgeInsets.all(0.0),
+                      child: new TaskCell(task),
+                      onPressed: () {
+                        print("Task cell tapped: $i");
+                        Navigator.push(context, 
+                          new MaterialPageRoute(
+                            builder: (context) => new DetailPage(task)
+                          )
+                        );
+                      },
+                    );
+                  },
+                  );
+  }
+  
 }
 
   @override
@@ -106,26 +139,7 @@ List<TaskObject> newTasks(bool showAll) {
             ],
           ),
       body: new Center(
-          child: _isLoading
-              ? new CircularProgressIndicator()
-              : new ListView.builder(
-                  itemCount: timedTasks != null ? timedTasks.length : 0,
-                  itemBuilder: (context, i) {
-                    final task = timedTasks[i];
-                    return new FlatButton(
-                      padding: new EdgeInsets.all(0.0),
-                      child: new TaskCell(task),
-                      onPressed: () {
-                        print("Task cell tapped: $i");
-                        Navigator.push(context, 
-                          new MaterialPageRoute(
-                            builder: (context) => new DetailPage(task)
-                          )
-                        );
-                      },
-                    );
-                  },
-                  ),
+          child: getSituationalView(timedTasks)
         ),
     );
     
