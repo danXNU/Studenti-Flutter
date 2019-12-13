@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
-
+import '../objects.dart';
 
 class DetailPage extends StatelessWidget {
+  TaskObject task;
+
+  DetailPage(this.task);
+
   @override
     Widget build(BuildContext context) {
       return new Scaffold(
         appBar: new AppBar(
           title: new Text("Detail page"),
         ),
-        body: new Center(
-          child: new Text("Detail detail detail"),
-        ),
+        body: new Column(
+          children: <Widget>[
+            new Text("${task.titolo}"),
+          ],
+        )
       );
     }
 }

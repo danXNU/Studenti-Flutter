@@ -107,7 +107,7 @@ List<TaskObject> newTasks(bool showAll) {
                         print("Task cell tapped: $i");
                         Navigator.push(context, 
                           new MaterialPageRoute(
-                            builder: (context) => new DetailPage()
+                            builder: (context) => new DetailPage(task)
                           )
                         );
                       },
