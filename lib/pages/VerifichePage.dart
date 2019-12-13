@@ -18,16 +18,18 @@ class VerifichePage extends StatefulWidget {
 
 class VerificheState extends State<VerifichePage> with AutomaticKeepAliveClientMixin<VerifichePage> {
   var _isLoading = true;
+  var _isError = false;
   List<TaskObject> tasks = List<TaskObject>();
 
   @override 
   bool get wantKeepAlive => true;
 
   _fetchData() async {
-    print("Attempting to fetch data from network");
 
     final url = "http://64.52.84.80/Studenti-Server/get_tasks.php?task_type=1";
-    final response = await http.get(url);
+
+    try {
+      final response = await http.get(url);
 
     print(url);
 
@@ -46,10 +48,16 @@ class VerificheState extends State<VerifichePage> with AutomaticKeepAliveClientM
         setState(() {
           _isLoading = false;
           this.tasks = convertedTasks;
+          this._isError = false;
         });
       }
       
     }
+    } catch (e) {
+      print(e);
+      this._isError = true;
+    }
+    
   }
 
 @override

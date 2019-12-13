@@ -23,9 +23,9 @@ class CompitiState extends State<CompitiPage> with AutomaticKeepAliveClientMixin
     print("Attempting to fetch data from network");
 
     final url = "http://64.52.84.80/Studenti-Server/get_tasks.php?task_type=2";
-    final response = await http.get(url);
-
-    print(url);
+    try {
+      final response = await http.get(url);
+      print(url);
 
     if (response.statusCode == 200) {
       // print(response.body);
@@ -46,6 +46,12 @@ class CompitiState extends State<CompitiPage> with AutomaticKeepAliveClientMixin
       }
       
     }
+    } catch (e) {
+        print(e);
+    }
+    
+
+    
   }
 
 @override

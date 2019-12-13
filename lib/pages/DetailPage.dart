@@ -10,7 +10,7 @@ class DetailPage extends StatelessWidget {
     Widget build(BuildContext context) {
       return new Scaffold(
         appBar: new AppBar(
-          title: new Text("Detail page"),
+          title: new Text("${task.materiaString}"),
         ),
         body: new Column(
           children: <Widget>[
