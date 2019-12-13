@@ -73,6 +73,10 @@ List<TaskObject> newTasks(bool showAll) {
 
     return new Scaffold(
       persistentFooterButtons: <Widget>[
+        new Text(
+          "Mostra tutte le verifiche",
+          textAlign: TextAlign.left,
+        ),
         new Switch(
           value: showAllVerifiche,
           onChanged: (newValue) {
