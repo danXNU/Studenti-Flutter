@@ -14,9 +14,9 @@ class CompitiPage extends StatefulWidget {
 
 class CompitiState extends State<CompitiPage> with AutomaticKeepAliveClientMixin<CompitiPage> {
   var _isLoading = true;
-  var tasks;
+  List<TaskObject> tasks = List<TaskObject>();
 
-  @override
+  @override 
   bool get wantKeepAlive => true;
 
   _fetchData() async {
@@ -54,9 +54,34 @@ class CompitiState extends State<CompitiPage> with AutomaticKeepAliveClientMixin
     _fetchData();
   }
 
+bool showAllVerifiche = false;
+
+List<TaskObject> newTasks(bool showAll) {
+  final DateTime now = DateTime.now();
+  final DateTime lastMidnight = DateTime(now.year, now.month, now.day);
+
+  return showAll ? tasks : tasks.where((task) => task.date.isAfter(lastMidnight)).toList();
+}
+
   @override
   Widget build(BuildContext context) {
+    final  timedTasks = newTasks(showAllVerifiche);
+
     return new Scaffold(
+      persistentFooterButtons: <Widget>[
+        new Text(
+          "Mostra anche i compiti vecchi",
+          textAlign: TextAlign.left,
+        ),
+        new Switch(
+          value: showAllVerifiche,
+          onChanged: (newValue) {
+            setState(() {
+              showAllVerifiche = newValue;
+            });
+          },
+        )
+          ],
       appBar: AppBar(
             title: Text("Compiti"),
             actions: [
@@ -72,9 +97,9 @@ class CompitiState extends State<CompitiPage> with AutomaticKeepAliveClientMixin
           child: _isLoading
               ? new CircularProgressIndicator()
               : new ListView.builder(
-                  itemCount: this.tasks != null ? this.tasks.length : 0,
+                  itemCount: timedTasks != null ? timedTasks.length : 0,
                   itemBuilder: (context, i) {
-                    final task = this.tasks[i];
+                    final task = timedTasks[i];
                     return new FlatButton(
                       padding: new EdgeInsets.all(0.0),
                       child: new TaskCell(task),

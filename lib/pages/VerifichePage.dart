@@ -74,7 +74,7 @@ List<TaskObject> newTasks(bool showAll) {
     return new Scaffold(
       persistentFooterButtons: <Widget>[
         new Text(
-          "Mostra tutte le verifiche",
+          "Mostra anche le verifiche vecchie",
           textAlign: TextAlign.left,
         ),
         new Switch(
