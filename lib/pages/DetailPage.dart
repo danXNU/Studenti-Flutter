@@ -26,12 +26,12 @@ class DetailPage extends StatelessWidget {
                   children: <Widget>[
                     new Text(
                       "Data: ${task.dateStringValue}",
-                      style: new TextStyle(fontSize: 20),
+                      style: new TextStyle(fontSize: 16),
                     ),
                     new Spacer(),
                     new Text(
                       "${task.materiaString}",
-                      style: new TextStyle(fontSize: 20, color: Colors.grey),
+                      style: new TextStyle(fontSize: 17, color: Colors.grey),
                     ),
                   ],
                 ),

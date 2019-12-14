@@ -25,43 +25,6 @@ class VerificheState extends State<VerifichePage>
   @override
   bool get wantKeepAlive => true;
 
-  _fetchData() async {
-    setState(() {
-      _isLoading = true;
-    });
-    final url = "http://64.52.84.80/Studenti-Server/get_tasks.php?task_type=1";
-
-    try {
-      final response = await http.get(url);
-
-      print(url);
-
-      if (response.statusCode == 200) {
-        final tasksJson = json.decode(response.body);
-        var convertedTasks = new List<TaskObject>();
-
-        tasksJson.forEach((taskDict) {
-          final task = new TaskObject(taskDict["id"], taskDict["titolo"],
-              taskDict["materia"], taskDict["argomento"], taskDict["date"]);
-          convertedTasks.add(task);
-        });
-
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-            this.tasks = convertedTasks;
-            this.errorReported = false;
-          });
-        }
-      }
-    } catch (e) {
-      print(e);
-      setState(() {
-        this.errorReported = true;
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -70,7 +33,41 @@ class VerificheState extends State<VerifichePage>
 
   bool showAllVerifiche = false;
 
-  List<TaskObject> newTasks(bool showAll) {
+  @override
+  Widget build(BuildContext context) {
+    final timedTasks = newTasks(showAllVerifiche);
+
+    return new Scaffold(
+      persistentFooterButtons: <Widget>[
+        new Text(
+          "Mostra anche le verifiche vecchie",
+          textAlign: TextAlign.left,
+        ),
+        new Switch(
+          value: showAllVerifiche,
+          onChanged: (newValue) {
+            setState(() {
+              showAllVerifiche = newValue;
+            });
+          },
+        ),
+      ],
+      appBar: AppBar(
+        title: Text("Verifiche"),
+        actions: [
+          new IconButton(
+            icon: new Icon(Icons.refresh),
+            onPressed: () {
+              _fetchData();
+            },
+          )
+        ],
+      ),
+      body: new Center(child: getSituationalView(timedTasks)),
+    );
+  }
+
+List<TaskObject> newTasks(bool showAll) {
     final DateTime now = DateTime.now();
     final DateTime lastMidnight = DateTime(now.year, now.month, now.day);
 
@@ -114,37 +111,40 @@ class VerificheState extends State<VerifichePage>
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final timedTasks = newTasks(showAllVerifiche);
+  _fetchData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final url = "http://64.52.84.80/Studenti-Server/get_tasks.php?task_type=1";
 
-    return new Scaffold(
-      persistentFooterButtons: <Widget>[
-        new Text(
-          "Mostra anche le verifiche vecchie",
-          textAlign: TextAlign.left,
-        ),
-        new Switch(
-          value: showAllVerifiche,
-          onChanged: (newValue) {
-            setState(() {
-              showAllVerifiche = newValue;
-            });
-          },
-        ),
-      ],
-      appBar: AppBar(
-        title: Text("Verifiche"),
-        actions: [
-          new IconButton(
-            icon: new Icon(Icons.refresh),
-            onPressed: () {
-              _fetchData();
-            },
-          )
-        ],
-      ),
-      body: new Center(child: getSituationalView(timedTasks)),
-    );
+    try {
+      final response = await http.get(url);
+
+      print(url);
+
+      if (response.statusCode == 200) {
+        final tasksJson = json.decode(response.body);
+        var convertedTasks = new List<TaskObject>();
+
+        tasksJson.forEach((taskDict) {
+          final task = new TaskObject(taskDict["id"], taskDict["titolo"],
+              taskDict["materia"], taskDict["argomento"], taskDict["date"]);
+          convertedTasks.add(task);
+        });
+
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+            this.tasks = convertedTasks;
+            this.errorReported = false;
+          });
+        }
+      }
+    } catch (e) {
+      print(e);
+      setState(() {
+        this.errorReported = true;
+      });
+    }
   }
 }
