@@ -20,6 +20,22 @@ class TaskObject {
     return Materia().getMateriaString(materia);
   }
 
+  bool isTomorrow() {
+    final now = DateTime.now();
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    final dateToCheck = DateTime(this.date.year, this.date.month, this.date.day);
+    
+    return (dateToCheck == tomorrow);
+  }
+
+  bool isToday() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final dateToCheck = DateTime(this.date.year, this.date.month, this.date.day);
+    
+    return (dateToCheck == today);
+  }
+
   TaskObject(this.id, this.titolo, this.materia, this.argomento, this._date);
 }
 
