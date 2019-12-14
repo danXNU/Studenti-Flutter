@@ -74,9 +74,12 @@ class VerificheState extends State<VerifichePage>
     final DateTime now = DateTime.now();
     final DateTime lastMidnight = DateTime(now.year, now.month, now.day);
 
-    return showAll
+    final tasksToReturn = showAll
         ? tasks
         : tasks.where((task) => task.date.isAfter(lastMidnight)).toList();
+
+      tasksToReturn.sort((a, b) { return a.date.compareTo(b.date); });
+      return tasksToReturn;
   }
 
   Widget getSituationalView(List<TaskObject> tasks) {
