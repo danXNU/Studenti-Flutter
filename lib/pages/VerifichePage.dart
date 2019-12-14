@@ -25,7 +25,9 @@ class VerificheState extends State<VerifichePage> with AutomaticKeepAliveClientM
   bool get wantKeepAlive => true;
 
   _fetchData() async {
-
+    setState(() {
+      _isLoading = true;
+    });
     final url = "http://64.52.84.80/Studenti-Server/get_tasks.php?task_type=1";
 
     try {
@@ -34,11 +36,9 @@ class VerificheState extends State<VerifichePage> with AutomaticKeepAliveClientM
     print(url);
 
     if (response.statusCode == 200) {
-      // print(response.body);
-
       final tasksJson = json.decode(response.body);
-
       var convertedTasks = new List<TaskObject>();
+
       tasksJson.forEach((taskDict) {
         final task = new TaskObject(taskDict["id"], taskDict["titolo"], taskDict["materia"], taskDict["argomento"], taskDict["date"]);
         convertedTasks.add(task);
@@ -81,12 +81,16 @@ List<TaskObject> newTasks(bool showAll) {
 Widget getSituationalView(List<TaskObject> tasks) {
   if (errorReported) {
     return new Center(
-      child: new Text("Error"),
+      child: new Text("C'è stato un errore. Riprova più tardi"),
+    );
+  } else if (_isLoading) {
+    return new CircularProgressIndicator();
+  } else if (tasks.isEmpty) {
+    return Center(
+      child: new Text("Non ci sono verifiche in programma."),
     );
   } else {
-    return _isLoading
-              ? new CircularProgressIndicator()
-              : new ListView.builder(
+    return new ListView.builder(
                   itemCount: tasks != null ? tasks.length : 0,
                   itemBuilder: (context, i) {
                     final task = tasks[i];
