@@ -9,7 +9,7 @@ class OrarioPage extends StatelessWidget {
         title: new Text("Orario"),
       ),
       body: new PhotoView(
-        imageProvider: NetworkImage("http://64.52.84.80/Studenti-Server/orario/orario.jpg"),
+        imageProvider: NetworkImage("https://danitoxserver.ddns.net/Studenti-Server/orario/orario.jpg"),
       )
       
     );

@@ -115,7 +115,7 @@ List<TaskObject> newTasks(bool showAll) {
     setState(() {
       _isLoading = true;
     });
-    final url = "http://64.52.84.80/Studenti-Server/get_tasks.php?task_type=1";
+    final url = "https://danitoxserver.ddns.net/Studenti-Server/get_tasks.php?task_type=1";
 
     try {
       final response = await http.get(url);
